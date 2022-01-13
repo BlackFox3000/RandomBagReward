@@ -1,0 +1,1 @@
+[{"plugin":"minecraft","nomItem":"book","count":12,"chance":3.4,"index":0,"isCustomItem":false,"otherArg":[]}]

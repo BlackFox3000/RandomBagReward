@@ -1,0 +1,1 @@
+[{"plugin":"itemreward","nomItem":"ULU","count":1,"chance":1.6,"index":0,"isCustomItem":true,"otherArg":[]},{"plugin":"minecraft","nomItem":"grass_block","count":64,"chance":3.4,"index":0,"isCustomItem":false,"otherArg":[]},{"plugin":"minecraft","nomItem":"grass_blocko","count":64,"chance":3.4,"index":0,"isCustomItem":false,"otherArg":[]}]

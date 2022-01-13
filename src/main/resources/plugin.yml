@@ -1,0 +1,19 @@
+main: fr.lataverne.randomreward.RandomReward
+
+name: RandomReward
+
+version: 1.18
+
+authors:
+  - Black_Fox3000
+  - syukoGit
+
+commands:
+  randomreward:
+    aliases:
+      - rr
+      - randomreward
+
+permissions:
+  rr.give:
+    default: op
