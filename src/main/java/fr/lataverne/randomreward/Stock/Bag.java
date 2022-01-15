@@ -10,6 +10,7 @@ import fr.lataverne.randomreward.RandomBuilder;
 import fr.lataverne.randomreward.RandomReward;
 import fr.lataverne.randomreward.Reward;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -31,45 +32,20 @@ public class Bag {
     public ArrayList<Reward> rewards;
 
     public Bag(){
-        System.out.println("test0");
         rewards = new ArrayList<>();
-        System.out.println("Création bag");
     }
 
     public  Bag(String json) throws JsonProcessingException{
 
         final ObjectMapper objectMapper = new ObjectMapper();
-        //Reward[] rewards1 = objectMapper.readValue(json, Reward[].class);
-
-//        JSONObject jsnobject = new Json(json);
-//        JSONArray jsonArray = jsnobject.getJSONArray("languages");
-//        ArrayList<Reward> listdata = new ArrayList<>();
-//
-//        if (jsonArray != null) {
-//
-//            //Iterating JSON array
-//            for (int i=0;i<jsonArray.length();i++){
-//
-//                //Adding each element of JSON array into ArrayList
-//                listdata.add((Reward) jsonArray.get(i));
-//            }
-//        }
-
-        //Collections.addAll(rewards, rewards1);
-
-//        final ObjectMapper objectMapper = new ObjectMapper();
-//        Reward[] rewards1 = objectMapper.readValue(json, Reward.class);
         System.out.println("construction bag d'un joueur");
         List<Reward> rewards1 = objectMapper.readValue(json, new TypeReference<List<Reward>>(){});
         rewards = new ArrayList<>(rewards1);
-       // rewards = (ArrayList<Reward>) Arrays.asList(rewards1);
     }
 
     public void open(Player player){
         Inventory gui = Bukkit.createInventory(player,27, ChatColor.AQUA+"Reward bag");
-        System.out.println("test");
          setRewardIntoGui(gui,0);
-        System.out.println("test");
         //ajouter book précedent et next
         player.openInventory(gui);
     }
@@ -127,14 +103,68 @@ public class Bag {
         }
     }
 
-    public void printList(Player player){
+    public void printList(Player player, int index){
+        int max = (int) Math.ceil((double)rewards.size()/7);
+
+        //controle anti-dépassement
+        if(index>max)
+            index = max;
         player.sendMessage("Tu possède "+rewards.size() +" items dans ton sac");
-        for(int i=0 ; rewards.size()>i ;i++){
-            System.out.println("test");
-            Reward reward = rewards.get(i);
-            TextComponent text = new TextComponent(ChatColor.AQUA + "[Clique pour obtenir] -- " + reward.getName() + " -- ");
-            text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/rr get "+i));
-            player.spigot().sendMessage(text);
+
+        //Affichage contenue bag
+
+        if(rewards.size()!=0){
+            int start = 7 * index-7;
+
+            TextComponent head = new TextComponent(ChatColor.AQUA + "=================Bag==================");
+            player.spigot().sendMessage(head);
+
+            for (int i = start; start + 7 > i; i++) {
+                if (rewards.size() > i) {
+                    Reward reward = rewards.get(i);
+                    String spaceQuantity ="";
+                    if(rewards.get(i).getCount()<100)
+                        spaceQuantity =" ";
+                    if(rewards.get(i).getCount()<10)
+                        spaceQuantity = "  ";
+                    TextComponent text = new TextComponent(
+                            ChatColor.AQUA + "[Clique pour obtenir] -- " +
+                                    ChatColor.WHITE + reward.getCount() +spaceQuantity+ ChatColor.AQUA + " -- " + ChatColor.WHITE + reward.getName());
+                    text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rr get " + i));
+                    player.spigot().sendMessage(text);
+                }
+            }
+            ComponentBuilder foot1 = new ComponentBuilder();
+
+            //Page precedente
+            String spaceStringPred = "";
+            if (index > 1 ) {
+                if (index < 100)
+                    spaceStringPred = " ";
+                if (index < 10)
+                    spaceStringPred = "  ";
+                foot1.append(ChatColor.WHITE + "<< Page " + (index - 1) + spaceStringPred);
+                foot1.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rr baglist " + (index - 1)));
+            } else
+                foot1.append(ChatColor.AQUA + "========");
+
+            foot1.append(ChatColor.AQUA + "=========");
+            foot1.append("(" + (index) + "/" + max + ")");
+            foot1.append(ChatColor.AQUA + "=====");
+
+            //Page suivant
+            String spaceStringSuiv = "";
+            if (index*7 < rewards.size()  ) {
+                if (index < 100)
+                    spaceStringSuiv = " ";
+                if (index < 10)
+                    spaceStringSuiv = "  ";
+                foot1.append(ChatColor.AQUA + "==== "+ChatColor.WHITE +"Page " + (index + 1) + spaceStringSuiv + ">>");
+                foot1.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rr baglist " + (index + 1)));
+            } else
+                foot1.append(ChatColor.AQUA + "===========");
+
+            player.spigot().sendMessage(foot1.create());
         }
     }
 
@@ -169,7 +199,7 @@ public class Bag {
 
     }
 
-    public void get(Player player,int index){
+    public void get(Player player,int index, boolean print){
         if(rewards.size()>index) {
             if(! testSpace(player))
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vide ton inventaire !");
@@ -186,9 +216,11 @@ public class Bag {
 
                     updateBag(player.getName());
 
-                    //ré-affichage du sac actualisé
-                    String command2 = "rr baglist ";
-                    Bukkit.dispatchCommand(player, command2);
+                    if(print) {
+                        //ré-affichage du sac actualisé
+                        String command2 = "rr baglist ";
+                        Bukkit.dispatchCommand(player, command2);
+                    }
                 }
         }
         else{

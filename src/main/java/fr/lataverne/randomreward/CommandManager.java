@@ -14,10 +14,12 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class CommandManager implements CommandExecutor {
 
     HashMap<String, Bag> bags;
+    public boolean DEBUG = false;
 
     public CommandManager(HashMap<String,Bag> initialBags){
         bags = initialBags;
@@ -31,20 +33,25 @@ public class CommandManager implements CommandExecutor {
                 return false;
             }
 
-            if(args[0].equalsIgnoreCase("bag") && sender.hasPermission("rr.bag.read.gui")){
+            if(args[0].equalsIgnoreCase("bag") && sender.hasPermission("rr.bag.read.gui") && ! args[1].equalsIgnoreCase("list")){
                 Bag bag = new Bag();
-                System.out.println("test");
                 bag.open((Player) sender);
                 return true;
             }
 
-            if(args[0].equalsIgnoreCase("baglist")) {
-                printListBag((Player) sender);
+            if(args[0].equalsIgnoreCase("baglist") || (args[0].equalsIgnoreCase("bag") && args[1].equalsIgnoreCase("list"))) {
+                if(args.length>1)
+                    if(!Objects.equals(args[1], "list"))
+                        if(Integer.parseInt(args[1])>0) {
+                            printListBag((Player) sender, Integer.parseInt(args[1]));
+                            return true;
+                        }
+                printListBag((Player) sender, 1);
                 return true;
             }
 
             if(args[0].equalsIgnoreCase("space")) {
-                sender.sendMessage(ChatColor.AQUA + "Quel place incroyable " + invSpace(((Player) sender).getInventory()) + " de libre !");
+                sender.sendMessage(ChatColor.AQUA + "Quelle place incroyable " + invSpace(((Player) sender).getInventory()) + " de libre !");
                 return true;
             }
         }
@@ -54,12 +61,26 @@ public class CommandManager implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED +"Mauvaise utilisation !");
                 return false;
             }
-
             if(args[0].equalsIgnoreCase("get")) {
-                if (args[1] != null)
-                    giveRewardToPlayer((Player) sender, args[1]);
+                if (args.length == 2) {
+                    assert sender instanceof Player;
+                    giveRewardToPlayer((Player) sender, args[1], true);
+                }
+                else
+                    sender.sendMessage(ChatColor.RED+"Id manquant : /rr get [index] ou utiliser /rr getall");
+
                 return true;
             }
+            if(args[0].equalsIgnoreCase("getAll")) {
+                while (! bags.get(sender.getName()).rewards.isEmpty()) {
+                    assert sender instanceof Player;
+                    if (invSpace(((Player) sender).getInventory()) == 0) break;
+                        giveRewardToPlayer((Player) sender, String.valueOf(0), false);
+                }
+
+                return true;
+            }
+
         }
 
         if (sender instanceof ConsoleCommandSender || sender instanceof Player && sender.hasPermission("rr.give")) {
@@ -75,7 +96,6 @@ public class CommandManager implements CommandExecutor {
 
             if (args[0].equalsIgnoreCase("give")) {
                 if (args.length<3) {
-                    System.out.println("add in bag");
                     addRewardInBag(args[1]);
                 }else{
                     Player player = Bukkit.getPlayer(args[1]);
@@ -87,53 +107,78 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
         }
+        if(args[0].equalsIgnoreCase("help"))
+        {
+            sender.sendMessage(ChatColor.AQUA+"==============RandomReward==============");
+            sender.sendMessage(ChatColor.AQUA+"/rr [commande] [argument1] [argument2]  ");
+            sender.sendMessage(ChatColor.AQUA+"baglist    "+ChatColor.WHITE+": Détail du contenu du sac");
+            sender.sendMessage(ChatColor.AQUA+"bag list   "+ChatColor.WHITE+": Voir baglist");
+            sender.sendMessage(ChatColor.AQUA+"getAll     "+ChatColor.WHITE+": Vide son sac dans l'inventaire");
+            sender.sendMessage(ChatColor.AQUA+"get [id]   "+ChatColor.WHITE+": Récupère la récompense  la Ième place dans le bag");
+            sender.sendMessage(ChatColor.AQUA+"help       "+ChatColor.WHITE+": Informations sur les commandes disponibles");
+            sender.sendMessage(ChatColor.AQUA+"adminhelp "+ChatColor.WHITE+": Information pour les admins");
+            sender.sendMessage(ChatColor.AQUA+"space     "+ChatColor.WHITE+": Do you love kitty? ");
+            sender.sendMessage(ChatColor.AQUA+"==============RandomReward==============");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("adminhelp"))
+            if(sender instanceof ConsoleCommandSender || sender instanceof Player && sender.hasPermission("rr.admin.help"))
+            {
+                sender.sendMessage(ChatColor.AQUA+"==============RandomReward==============");
+                sender.sendMessage(ChatColor.AQUA+"/rr [commande] [argument1] [argument2]  ");
+                sender.sendMessage(ChatColor.AQUA+"give [nom_player]          ");
+                sender.sendMessage(ChatColor.WHITE+": donne une récompense dans le SAC du joueur");
+                sender.sendMessage(ChatColor.AQUA+"give [nom_player] [nombre] ");
+                sender.sendMessage(ChatColor.WHITE+": donne X récompenses dans l'INVENTAIRE du joueur");
+                sender.sendMessage(ChatColor.AQUA+"list                       ");
+                sender.sendMessage(ChatColor.WHITE+": Affiche les récompenses et les % associés ");
+                sender.sendMessage(ChatColor.AQUA+"get [id]                   ");
+                sender.sendMessage(ChatColor.WHITE+": récupère la récompense  la Ième place dans le bag");
+                sender.sendMessage(ChatColor.AQUA+"==============RandomReward==============");
+                return true;
+            }
 
-        if(sender instanceof Player) sender.sendMessage(ChatColor.RED+"Vous n'avez pas la permission d'executer cette commande");
+        if(sender instanceof Player) sender.sendMessage(ChatColor.RED+"Vous n'avez pas la permission d'executer cette commande ou commande inexistante");
         return false;
     }
 
-    private void giveRewardToPlayer(Player player, String arg1) {
+    private void giveRewardToPlayer(Player player, String arg1, boolean print) {
         int index = Integer.parseInt(arg1);
         if (player!=null)
             if(bags.containsKey(player.getName())) {
-                bags.get(player.getName()).get(player,index);
+                bags.get(player.getName()).get(player,index, print);
             }else
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vous ne possédez aucun sac");
     }
 
-    private void printListBag(Player player) {
-        System.out.println("lecture du sac");
+    private void printListBag(Player player,int index) {
+        debug("lecture du sac");
         String playerName = player.getName();
             if(bags.containsKey(playerName)) {
-                    bags.get(playerName).printList(player);
-                System.out.println("lecture sac");
+                    bags.get(playerName).printList(player, index);
+                debug("lecture sac");
             }else {
                 player.sendMessage(ChatColor.DARK_PURPLE + "Vous ne possédez aucun sac");
-                System.out.println("lecture annulée");
+                debug("lecture annulée: sac du joueur innexistant");
             }
             
     }
 
     private void addRewardInBag(String playerName) {
-        System.out.println("add bag 1");
-        if(bags == null)
-            System.out.println("Bagg nulll !!");
         if(! bags.containsKey(playerName)) {
-            System.out.println("bagor");
             Bag bag = new Bag();
-            System.out.println("bagy");
             bags.put(playerName, bag);
         }
-        System.out.println("add bag 2");
         Player player = Bukkit.getPlayer(playerName);
         bags.get(playerName).addReward(player);
+        bags.get(playerName).updateBag(playerName);
     }
 
     private void listItems(CommandSender sender) {
         ArrayList<String> list = RandomReward.getInstance().getList();
         sender.sendMessage(ChatColor.AQUA + "================== RandomReward ==================");
         for(String string : list){
-            sender.sendMessage(ChatColor.LIGHT_PURPLE + string);
+            sender.sendMessage(ChatColor.WHITE + string);
         }
         sender.sendMessage(ChatColor.AQUA + "================== RandomReward ==================");
     }
@@ -183,4 +228,10 @@ public class CommandManager implements CommandExecutor {
         if(! bags.containsKey(playerName))
             bags.put(playerName,bag);
     }
+
+    private void debug(String string) {
+        if (DEBUG)
+            System.out.println(string);
+    }
+
 }

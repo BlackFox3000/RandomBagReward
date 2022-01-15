@@ -18,30 +18,34 @@ public class RandomReward extends JavaPlugin {
     private static RandomReward instance;
     private RandomBuilder randomBuilder;
 
+    private final boolean DEBUG = false;
+
     private CommandManager commandManager;
 
     @Override
     public void onEnable() {
+        /* Fichier : rewards.txt */
 
         File file = new File(getDataFolder(), "rewards.txt");
         if (!file.exists()) {// saves it to your plugin's data folder if it doesn't exist already
             file.getParentFile().mkdirs();
             try {
-                System.out.println("creation du fichier !! ");
+                debug("creation du fichier !! ");
                 file.createNewFile();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }else
-            System.out.println("le fichier existe ! ");
+            debug("le fichier existe ! ");
 
         instance = this;
 
+        /* Chargement des Bags */
         HashMap<String, Bag> initialBags = null;
         try {
             initialBags = getSaveFile();
             if(initialBags==null)
-                System.out.println("echec du chargements des bags save");;
+                debug("echec du chargements des bags save");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,19 +83,12 @@ public class RandomReward extends JavaPlugin {
       //  RandomReward.getSaveFile();
     }
 
-    public static HashMap<String, Bag> getSaveFile() throws IOException {
+    public HashMap<String, Bag> getSaveFile() throws IOException {
         File folder = new File("plugins/RandomReward/players/");
         HashMap<String, Bag> bags = new HashMap<>();
-//        Path bagsDirectory = Paths.get("plugins/RandomReward/players");
-//        if (!Files.exists(bagsDirectory)) {
-//            try {
-//                Files.createDirectory(bagsDirectory);
-//            } catch (final IOException ignored) {
-//            }
-//        }
 
         if (folder.listFiles() == null) {
-            System.out.println("[RandomReward] create folder 'player/'");
+            debug("[RandomReward] create folder 'player/'");
             Path path = Paths.get("plugins/RandomReward/players/");
             folder.mkdirs();
             Files.createDirectories(path);
@@ -102,32 +99,18 @@ public class RandomReward extends JavaPlugin {
 
         for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
             if (!fileEntry.isDirectory()) {
-                System.out.println("====>"+fileEntry.getName());
-//                String fileName = "plugins/RandomReward/players/" + fileEntry.getName();
-//                File file = new File(fileName);
                 FileReader fr = new FileReader(fileEntry);
                 BufferedReader br = new BufferedReader(fr);
-                String line, json = "";
+                String line;
+                StringBuilder json = new StringBuilder();
                 while ((line = br.readLine()) != null) {
-                    //process the line
-                    json += line;
-                    System.out.println(line);
+                    json.append(line);
                 }
-                Bag bag = new Bag(json);
-//                commandManager.add(fileEntry.getName().replace(".text",""),bag);
-                bag.print();
-               // if (!bags.containsKey(fileEntry.getName().replace(".text", ""))) {
-                    System.out.println("initialisation du sac de "+fileEntry.getName().replace(".text", "")+"  terminée");
+                Bag bag = new Bag(json.toString());
                     String name = fileEntry.getName().replace(".txt", "");
-                System.out.println("name file : "+name);
                     bags.put(name, bag);
-                //}else{
-                //    bags.get(fileEntry.getName().replace(".text", "")) = bag;
-               // }
             }
         }
-        for(String name : bags.keySet())
-            System.out.println("Sac existant : "+ name);
         return bags;
     }
 
@@ -148,4 +131,8 @@ public class RandomReward extends JavaPlugin {
         return  randomBuilder.getList();
     }
 
+    public void debug(String string){
+        if(DEBUG)
+            System.out.println(string);
+    }
 }
