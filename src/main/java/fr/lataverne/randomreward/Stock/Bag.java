@@ -214,7 +214,7 @@ public class Bag {
                     ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
                     Bukkit.dispatchCommand(console, command);
 
-                    updateBag(player.getName());
+                    updateBag(player.getUniqueId().toString());
 
                     if(print) {
                         //ré-affichage du sac actualisé
