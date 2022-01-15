@@ -6,6 +6,10 @@ RandomBagReward correspond à la version RandomReward.2.0
 Ce plugin permet d'offrir des récompenses à chaques vote d'une joueur via une commande (nécessite un plugin de gestion de vote pour appeler la commande ).
 Les votes sont tirées aléatoirement dans une liste de récompenses qui se trouve dans le fichier [rewards.yml](https://github.com/BlackFox3000/RandomBagReward/blob/master/src/main/java/fr/lataverne/randomreward/rewards.txt)
 
+Avantage de notre plugin :
+- Gestion du gain des joueurs hors-ligne
+- Prise en charge de gain de récompense par % propore à chaque item
+
 ## Commandes
 -rr bag : ouvre une gui vide, qui peu servire de poubelle actuellement ... (disponible op uniquement) [interface a venir..]
 -rr baglist : affiche la première page de contenu du sac, si le sac n'est pas vide
@@ -60,5 +64,4 @@ Une fois les récompenses terminées, il faut recharger le plugin.
 
 
 ## À venir
-- Renommage des fichiers en UUID plutôt que des Pseudos ( permet la portabiité si changement de nom )
 - Bag GUI (visible en faisant /rr bag actuelement disponible uniquement au OP, sert actuelement de grosse poubelle) 
