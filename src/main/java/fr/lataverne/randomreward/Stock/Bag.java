@@ -91,7 +91,7 @@ public class Bag {
 
     }
 
-    public void addReward(Player player){
+    public void addReward(Player player, String uuid){
         RandomBuilder rb = RandomReward.getInstance().getRandomBuilder();
         Reward reward = rb.getRandomReward();
         rewards.add(reward);
@@ -99,7 +99,7 @@ public class Bag {
             TextComponent text = new TextComponent(ChatColor.GREEN + "[RécopenseVote] Merci d'avoir voté ! " + reward.getName() + " ajouté à ton sac. ");
             text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/rr bag"));
             player.spigot().sendMessage(text);
-            updateBag(player.getName());
+            updateBag(uuid);
         }
     }
 

@@ -72,7 +72,7 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
             if(args[0].equalsIgnoreCase("getAll")) {
-                while (! bags.get(sender.getName()).rewards.isEmpty()) {
+                while (! bags.get(((Player)sender).getUniqueId().toString()).rewards.isEmpty()) {
                     assert sender instanceof Player;
                     if (invSpace(((Player) sender).getInventory()) == 0) break;
                         giveRewardToPlayer((Player) sender, String.valueOf(0), false);
@@ -145,33 +145,37 @@ public class CommandManager implements CommandExecutor {
     private void giveRewardToPlayer(Player player, String arg1, boolean print) {
         int index = Integer.parseInt(arg1);
         if (player!=null)
-            if(bags.containsKey(player.getName())) {
-                bags.get(player.getName()).get(player,index, print);
+            if(bags.containsKey(player.getUniqueId().toString())) {
+                bags.get(player.getUniqueId().toString()).get(player,index, print);
             }else
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vous ne possédez aucun sac");
     }
 
     private void printListBag(Player player,int index) {
         debug("lecture du sac");
-        String playerName = player.getName();
-            if(bags.containsKey(playerName)) {
-                    bags.get(playerName).printList(player, index);
+            if(bags.containsKey(player.getUniqueId().toString())) {
+                    bags.get(player.getUniqueId().toString()).printList(player, index);
                 debug("lecture sac");
             }else {
                 player.sendMessage(ChatColor.DARK_PURPLE + "Vous ne possédez aucun sac");
                 debug("lecture annulée: sac du joueur innexistant");
             }
-            
     }
 
     private void addRewardInBag(String playerName) {
-        if(! bags.containsKey(playerName)) {
-            Bag bag = new Bag();
-            bags.put(playerName, bag);
-        }
         Player player = Bukkit.getPlayer(playerName);
-        bags.get(playerName).addReward(player);
-        bags.get(playerName).updateBag(playerName);
+        String uuid;
+        if(player == null)
+            uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId().toString();
+        else
+         uuid = player.getUniqueId().toString();
+        if(! bags.containsKey(uuid)) {
+            Bag bag = new Bag();
+            bags.put(uuid, bag);
+        }
+
+        bags.get(uuid).addReward(player, uuid);
+        bags.get(uuid).updateBag(uuid);
     }
 
     private void listItems(CommandSender sender) {
@@ -225,8 +229,10 @@ public class CommandManager implements CommandExecutor {
     }
 
     public void add(String playerName, Bag bag) {
-        if(! bags.containsKey(playerName))
-            bags.put(playerName,bag);
+        Player player = Bukkit.getPlayer(playerName);
+        String uuid = player.getUniqueId().toString();
+        if(! bags.containsKey(uuid))
+            bags.put(uuid,bag);
     }
 
     private void debug(String string) {
