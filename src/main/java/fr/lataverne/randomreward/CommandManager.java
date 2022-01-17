@@ -72,11 +72,14 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
             if(args[0].equalsIgnoreCase("getAll")) {
-                while (! bags.get(((Player)sender).getUniqueId().toString()).rewards.isEmpty()) {
-                    assert sender instanceof Player;
-                    if (invSpace(((Player) sender).getInventory()) == 0) break;
+                if(bags.containsKey(((Player)sender).getUniqueId().toString())) {
+                    while (!bags.get(((Player) sender).getUniqueId().toString()).rewards.isEmpty()) {
+                        assert sender instanceof Player;
+                        if (invSpace(((Player) sender).getInventory()) == 0) break;
                         giveRewardToPlayer((Player) sender, String.valueOf(0), false);
-                }
+                    }
+                }else
+                    sender.sendMessage(ChatColor.DARK_PURPLE+"Vous ne possédez aucun sac");
 
                 return true;
             }

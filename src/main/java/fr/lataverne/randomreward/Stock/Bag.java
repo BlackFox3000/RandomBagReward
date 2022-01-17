@@ -11,6 +11,7 @@ import fr.lataverne.randomreward.RandomReward;
 import fr.lataverne.randomreward.Reward;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -96,7 +97,7 @@ public class Bag {
         Reward reward = rb.getRandomReward();
         rewards.add(reward);
         if(player!=null) {
-            TextComponent text = new TextComponent(ChatColor.GREEN + "[RécopenseVote] Merci d'avoir voté ! " + reward.getName() + " ajouté à ton sac. ");
+            TextComponent text = new TextComponent(ChatColor.GREEN + "[RécompenseVote] Merci d'avoir voté ! " + reward.getName() + " ajouté à ton sac. ");
             text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/rr bag"));
             player.spigot().sendMessage(text);
             updateBag(uuid);
@@ -127,10 +128,17 @@ public class Bag {
                         spaceQuantity =" ";
                     if(rewards.get(i).getCount()<10)
                         spaceQuantity = "  ";
+                    //===============================
+                    String spaceIndex ="";
+                    if(i<100)
+                        spaceIndex =" ";
+                    if(i<10)
+                        spaceIndex = "  ";
                     TextComponent text = new TextComponent(
-                            ChatColor.AQUA + "[Clique pour obtenir] -- " +
-                                    ChatColor.WHITE + reward.getCount() +spaceQuantity+ ChatColor.AQUA + " -- " + ChatColor.WHITE + reward.getName());
-                    text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rr get " + i));
+                            ChatColor.AQUA + "["+spaceIndex+(i+1)+"]-- " +
+                                    ChatColor.WHITE + spaceQuantity + reward.getCount() + ChatColor.AQUA + " -- " + ChatColor.WHITE + reward.getName());
+                    text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rr get " + (i+1)));
+                    text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.AQUA + "Clique pour obtenir !").create()));
                     player.spigot().sendMessage(text);
                 }
             }
@@ -200,13 +208,13 @@ public class Bag {
     }
 
     public void get(Player player,int index, boolean print){
-        if(rewards.size()>index) {
+        if(rewards.size()>index && index!=0) {
             if(! testSpace(player))
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vide ton inventaire !");
             else
-                if (rewards.get(index) != null) {
-                    Reward reward = rewards.get(index);
-                    rewards.remove(index);
+                if (rewards.get(index-1) != null) {
+                    Reward reward = rewards.get(index-1);
+                    rewards.remove(index-1);
                     String command = reward.isCustomItem()
                             ? "ir give " + player.getDisplayName() + " " + reward.getName()
                             : "give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
