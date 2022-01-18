@@ -130,9 +130,9 @@ public class Bag {
                         spaceQuantity = "  ";
                     //===============================
                     String spaceIndex ="";
-                    if(i<100)
+                    if(i<99)
                         spaceIndex =" ";
-                    if(i<10)
+                    if(i<9)
                         spaceIndex = "  ";
                     TextComponent text = new TextComponent(
                             ChatColor.AQUA + "["+spaceIndex+(i+1)+"]-- " +
@@ -208,7 +208,7 @@ public class Bag {
     }
 
     public void get(Player player,int index, boolean print){
-        if(rewards.size()>index && index!=0) {
+        if(rewards.size()>index && index<1) {
             if(! testSpace(player))
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vide ton inventaire !");
             else
