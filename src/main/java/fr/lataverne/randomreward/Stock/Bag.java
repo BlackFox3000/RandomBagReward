@@ -182,8 +182,8 @@ public class Bag {
              File myObj = new File("plugins/RandomReward/players/"+pseudo+".txt");
             if (myObj.createNewFile())
                 System.out.println("création file.txt");
-            else
-                System.out.println("file already exist");
+            //else
+                //System.out.println("file already exist");
 
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -208,7 +208,7 @@ public class Bag {
     }
 
     public void get(Player player,int index, boolean print){
-        if(rewards.size()>index && index<1) {
+        if(rewards.size()>=index && index>0) {
             if(! testSpace(player))
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vide ton inventaire !");
             else

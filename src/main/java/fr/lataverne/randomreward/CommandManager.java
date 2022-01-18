@@ -33,11 +33,11 @@ public class CommandManager implements CommandExecutor {
                 return false;
             }
 
-            if(args[0].equalsIgnoreCase("bag") && sender.hasPermission("rr.bag.read.gui") && ! args[1].equalsIgnoreCase("list")){
-                Bag bag = new Bag();
-                bag.open((Player) sender);
-                return true;
-            }
+//            if(args[0].equalsIgnoreCase("bag") && sender.hasPermission("rr.bag.read.gui") && ! args[1].equalsIgnoreCase("list")){
+//                Bag bag = new Bag();
+//                bag.open((Player) sender);
+//                return true;
+//            }
 
             if(args[0].equalsIgnoreCase("baglist") || (args[0].equalsIgnoreCase("bag") && args[1].equalsIgnoreCase("list"))) {
                 if(args.length>1)
@@ -73,11 +73,10 @@ public class CommandManager implements CommandExecutor {
             }
             if(args[0].equalsIgnoreCase("getAll")) {
                 if(bags.containsKey(((Player)sender).getUniqueId().toString())) {
-                    while (!bags.get(((Player) sender).getUniqueId().toString()).rewards.isEmpty()) {
-                        assert sender instanceof Player;
-                        if (invSpace(((Player) sender).getInventory()) == 0) break;
-                        giveRewardToPlayer((Player) sender, String.valueOf(0), false);
-                    }
+                    assert sender instanceof Player;
+                    while (!bags.get(((Player) sender).getUniqueId().toString()).rewards.isEmpty() && invSpace(((Player) sender).getInventory()) != 0) {
+                        giveRewardToPlayer((Player) sender, String.valueOf(1), false);
+                }
                 }else
                     sender.sendMessage(ChatColor.DARK_PURPLE+"Vous ne possédez aucun sac");
 
