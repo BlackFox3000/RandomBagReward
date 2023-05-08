@@ -95,7 +95,7 @@ public class RandomReward extends JavaPlugin {
             folder = new File("plugins/RandomReward/players/");
     }
         else
-            System.out.println("[RandomRewar] Fichier '/player/' existant" );
+            debug("[RandomRewar] Fichier '/player/' existant" );
 
         for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
             if (!fileEntry.isDirectory()) {
