@@ -195,10 +195,15 @@ public class CommandManager implements CommandExecutor {
 
         Reward reward = rb.getRandomReward();
         //System.out.println("ir give " + player.getDisplayName() + " " + reward.nomItem);
-        String command = reward.isCustomItem
-                ? "ir give " + player.getDisplayName() + " " + reward.nomItem
-                : "give " + player.getDisplayName() + " " + reward.nomItem+" "+reward.count;
-                //"iagive " + player.getDisplayName() + " " + reward.nomItem+" "+reward.count;
+
+        String command = switch (reward.getPlugin()) {
+            case "minecraft" -> "give " + player.getDisplayName() + " " + reward.nomItem + " " + reward.count;
+            case "itemreward" -> "ir give " + player.getDisplayName() + " " + reward.nomItem;
+            case "itemsadder" -> "iagive " + player.getDisplayName() + " " + reward.nomItem ;
+            case "ecoitems" -> "ecoitems give " + player.getDisplayName() + " " + reward.nomItem;
+            default -> "say [error] RandomBagReward - plugin inconnu.";
+        };
+
 
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         Bukkit.dispatchCommand(console, command);

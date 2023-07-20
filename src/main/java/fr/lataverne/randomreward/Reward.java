@@ -22,14 +22,14 @@ public class Reward {
     @JsonProperty("otherArg")
     ArrayList<String> otherArg = new ArrayList<>();
 
-    public Reward(String[] word) {
-        this.plugin = word[0];
-        this.nomItem = word[1];
+    public Reward(String[] words) {
+        this.plugin = words[0];
+        this.nomItem = words[1];
         //System.out.println(word[1]);
-        this.count = Integer.parseInt(word[2]);
-        this.chance = Double.parseDouble(word[3]);
-        isCustomItem = (!word[0].toLowerCase().equals("minecraft"));
-        otherArg.addAll(Arrays.asList(word).subList(4, word.length));
+        this.count = Integer.parseInt(words[2]);
+        this.chance = Double.parseDouble(words[3]);
+        isCustomItem = (!words[0].toLowerCase().equals("minecraft"));
+        otherArg.addAll(Arrays.asList(words).subList(4, words.length));
     }
 
     public Reward(){
@@ -76,5 +76,9 @@ public class Reward {
 
     public int getCount() {
         return count;
+    }
+
+    public String getPlugin() {
+        return this.plugin;
     }
 }

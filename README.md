@@ -61,9 +61,11 @@ Une fois les récompenses terminées, il faut recharger le plugin.
 
 ## Compatibilité
 - [itemReward](https://github.com/la-taverne-mc/ItemReward)
+- [itemsAdder](https://itemsadder.devs.beer/)
+- [ecoItems](https://github.com/Auxilor/EcoItems)
 - [1.20]
 
 
 ## À venir
 - Bag GUI (visible en faisant /rr bag actuelement disponible uniquement au OP, sert actuelement de grosse poubelle) 
-- Top vote par mois ...
+ 

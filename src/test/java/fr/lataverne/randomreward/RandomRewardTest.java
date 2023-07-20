@@ -1,6 +1,7 @@
 package fr.lataverne.randomreward;
 
 import fr.lataverne.randomreward.Stock.Bag;
+import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -21,5 +22,4 @@ class RandomRewardTest {
         for(int i=0; i<100; i++)
             System.out.println("i: "+i+" max: "+(int) Math.ceil((double)i/7));
     }
-
 }
