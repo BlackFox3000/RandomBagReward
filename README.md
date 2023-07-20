@@ -61,6 +61,7 @@ Une fois les récompenses terminées, il faut recharger le plugin.
 
 ## Compatibilité
 - [itemReward](https://github.com/la-taverne-mc/ItemReward)
+- [1.20]
 
 
 ## À venir

@@ -39,7 +39,7 @@ public class Bag {
     public  Bag(String json) throws JsonProcessingException{
 
         final ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println("construction bag d'un joueur");
+        Bukkit.getConsoleSender().sendMessage("construction bag d'un joueur");
         List<Reward> rewards1 = objectMapper.readValue(json, new TypeReference<List<Reward>>(){});
         rewards = new ArrayList<>(rewards1);
     }
@@ -181,12 +181,12 @@ public class Bag {
         try {
              File myObj = new File("plugins/RandomReward/players/"+pseudo+".txt");
             if (myObj.createNewFile())
-                System.out.println("création file.txt");
+                Bukkit.getConsoleSender().sendMessage("création file.txt");
             //else
                 //System.out.println("file already exist");
 
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            Bukkit.getConsoleSender().sendMessage("An error occurred.");
             e.printStackTrace();
         }
 
@@ -199,9 +199,9 @@ public class Bag {
             String jsonArray = gson.toJson(rewards);
             myWriter.write(jsonArray);
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            Bukkit.getConsoleSender().sendMessage("Successfully wrote to the file.");
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            Bukkit.getConsoleSender().sendMessage("An error occurred.");
             e.printStackTrace();
         }
 
@@ -245,8 +245,8 @@ public class Bag {
     }
 
     public void print(){
-        System.out.println("bag contain");
+        Bukkit.getConsoleSender().sendMessage("bag contain");
         for(Reward reward:rewards)
-            System.out.println(reward.getName());
+            Bukkit.getConsoleSender().sendMessage(reward.getName());
     }
 }

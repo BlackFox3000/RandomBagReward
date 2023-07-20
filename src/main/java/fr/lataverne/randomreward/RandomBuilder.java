@@ -1,5 +1,7 @@
 package fr.lataverne.randomreward;
 
+import org.bukkit.Bukkit;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -23,7 +25,7 @@ public class RandomBuilder {
             this.initialiseIndexs();
 
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            Bukkit.getConsoleSender().sendMessage("An error occurred.");
             e.printStackTrace();
         }
     }
@@ -39,7 +41,7 @@ public class RandomBuilder {
 
     public void printRewards(){
         for (Integer index : rewardHashMap.keySet()){
-            System.out.print("index:"+index+" ");
+            Bukkit.getConsoleSender().sendMessage("index:"+index+" ");
             rewardHashMap.get(index).print();
         }
     }
@@ -85,7 +87,8 @@ public class RandomBuilder {
         for(int i = 0; i<500 ; i++) {
             Reward reward = randomBuilder.getRandomReward();
             if(reward == null)
-                System.out.println("on est naze patron");
+                //System.out.println("on est naze patron");
+                Bukkit.getConsoleSender().sendMessage("on est naze patron");
             else
             if(!stat.containsKey(reward.getName()))
                 stat.put(reward.getName(),1);

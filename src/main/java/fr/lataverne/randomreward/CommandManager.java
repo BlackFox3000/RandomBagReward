@@ -41,7 +41,7 @@ public class CommandManager implements CommandExecutor {
 
             if(args[0].equalsIgnoreCase("baglist") || (args[0].equalsIgnoreCase("bag") && args[1].equalsIgnoreCase("list"))) {
                 if(args.length>1)
-                    if(!Objects.equals(args[1], "list"))
+                    if(!Objects.equals(args[1], "list")) // bug
                         if(Integer.parseInt(args[1])>0) {
                             printListBag((Player) sender, Integer.parseInt(args[1]));
                             return true;
@@ -123,6 +123,7 @@ public class CommandManager implements CommandExecutor {
             sender.sendMessage(ChatColor.AQUA+"==============RandomReward==============");
             return true;
         }
+
         if(args[0].equalsIgnoreCase("adminhelp"))
             if(sender instanceof ConsoleCommandSender || sender instanceof Player && sender.hasPermission("rr.admin.help"))
             {
@@ -197,6 +198,7 @@ public class CommandManager implements CommandExecutor {
         String command = reward.isCustomItem
                 ? "ir give " + player.getDisplayName() + " " + reward.nomItem
                 : "give " + player.getDisplayName() + " " + reward.nomItem+" "+reward.count;
+                //"iagive " + player.getDisplayName() + " " + reward.nomItem+" "+reward.count;
 
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         Bukkit.dispatchCommand(console, command);
@@ -239,7 +241,7 @@ public class CommandManager implements CommandExecutor {
 
     private void debug(String string) {
         if (DEBUG)
-            System.out.println(string);
+            Bukkit.getConsoleSender().sendMessage(string);
     }
 
 }

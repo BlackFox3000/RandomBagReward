@@ -1,6 +1,7 @@
 package fr.lataverne.randomreward;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +59,7 @@ public class Reward {
     }
 
     public void print() {
-        System.out.println(this.nomItem +" "+ this.count +" " + this.chance +"% ");
+        Bukkit.getConsoleSender().sendMessage(this.nomItem +" "+ this.count +" " + this.chance +"% ");
     }
 
     public String getName() {

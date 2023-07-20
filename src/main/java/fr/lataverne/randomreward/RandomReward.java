@@ -78,7 +78,7 @@ public class RandomReward extends JavaPlugin {
 
         bag.updateBag("ocemay");
        // Bag ocemay = new Bag("[{\"plugin\":\"itemreward\",\"nomItem\":\"ULU\",\"count\":1,\"chance\":1.6,\"index\":0,\"isCustomItem\":true,\"otherArg\":[]},{\"plugin\":\"minecraft\",\"nomItem\":\"grass_block\",\"count\":64,\"chance\":3.4,\"index\":0,\"isCustomItem\":false,\"otherArg\":[]}]");
-        System.out.println("==============");
+        //System.out.println("==============");
        // ocemay.print();
       //  RandomReward.getSaveFile();
     }
@@ -133,6 +133,6 @@ public class RandomReward extends JavaPlugin {
 
     public void debug(String string){
         if(DEBUG)
-            System.out.println(string);
+            Bukkit.getConsoleSender().sendMessage(string);
     }
 }
