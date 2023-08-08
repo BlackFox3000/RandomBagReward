@@ -1,5 +1,6 @@
 package fr.lataverne.randomreward;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bukkit.Bukkit;
 
@@ -17,10 +18,18 @@ public class Reward {
     double chance;
     @JsonProperty("index")
     int index;
+    @Deprecated
     @JsonProperty("isCustomItem")
-    boolean isCustomItem = false;
+    boolean isCustomItem;
     @JsonProperty("otherArg")
     ArrayList<String> otherArg = new ArrayList<>();
+
+    /**
+     *
+     */
+    @JsonCreator
+    public Reward(){}
+
 
     public Reward(String[] words) {
         this.plugin = words[0];
@@ -28,13 +37,9 @@ public class Reward {
         //System.out.println(word[1]);
         this.count = Integer.parseInt(words[2]);
         this.chance = Double.parseDouble(words[3]);
-        isCustomItem = (!words[0].toLowerCase().equals("minecraft"));
-        otherArg.addAll(Arrays.asList(words).subList(4, words.length));
+        this.otherArg.addAll(Arrays.asList(words).subList(4, words.length));
     }
 
-    public Reward(){
-
-    }
 
     /** private boolean isCustomItem(String word) {
         return (word.equalsIgnoreCase("GoblinPickaxe" ) ||
@@ -60,6 +65,11 @@ public class Reward {
 
     public void print() {
         Bukkit.getConsoleSender().sendMessage(this.nomItem +" "+ this.count +" " + this.chance +"% ");
+
+    }
+    public void printTest() {
+        System.out.println(this.nomItem +" "+ this.count +" " + this.chance +"% ");
+
     }
 
     public String getName() {
@@ -68,10 +78,6 @@ public class Reward {
 
     public String getString() {
         return (this.nomItem +" "+ this.count +" " + this.chance +"% ");
-    }
-
-    public boolean isCustomItem() {
-        return isCustomItem;
     }
 
     public int getCount() {

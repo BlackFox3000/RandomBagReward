@@ -18,7 +18,7 @@ public class RandomReward extends JavaPlugin {
     private static RandomReward instance;
     private RandomBuilder randomBuilder;
 
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
 
     private CommandManager commandManager;
 
@@ -66,22 +66,22 @@ public class RandomReward extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClickEvent(), this);
     }
 
-    public static void main(String[] args) {
-        Reward ULU = new Reward(("itemreward ULU 1 1.6").split(" "));
-        Reward dirt = new Reward(("minecraft grass_block 64 3.4").split(" "));
-
-        Reward dirt2 = new Reward(("minecraft grass_blocko 64 3.4").split(" "));
-        Bag bag = new Bag();
-        bag.add(ULU);
-        bag.add(dirt);
-        bag.add(dirt2);
-
-        bag.updateBag("ocemay");
-       // Bag ocemay = new Bag("[{\"plugin\":\"itemreward\",\"nomItem\":\"ULU\",\"count\":1,\"chance\":1.6,\"index\":0,\"isCustomItem\":true,\"otherArg\":[]},{\"plugin\":\"minecraft\",\"nomItem\":\"grass_block\",\"count\":64,\"chance\":3.4,\"index\":0,\"isCustomItem\":false,\"otherArg\":[]}]");
-        //System.out.println("==============");
-       // ocemay.print();
-      //  RandomReward.getSaveFile();
-    }
+//    public static void main(String[] args) {
+//        Reward ULU = new Reward(("itemreward ULU 1 1.6").split(" "));
+//        Reward dirt = new Reward(("minecraft grass_block 64 3.4").split(" "));
+//
+//        Reward dirt2 = new Reward(("minecraft grass_blocko 64 3.4").split(" "));
+//        Bag bag = new Bag();
+//        bag.add(ULU);
+//        bag.add(dirt);
+//        bag.add(dirt2);
+//
+//        bag.updateBag("ocemay");
+//       // Bag ocemay = new Bag("[{\"plugin\":\"itemreward\",\"nomItem\":\"ULU\",\"count\":1,\"chance\":1.6,\"index\":0,\"isCustomItem\":true,\"otherArg\":[]},{\"plugin\":\"minecraft\",\"nomItem\":\"grass_block\",\"count\":64,\"chance\":3.4,\"index\":0,\"isCustomItem\":false,\"otherArg\":[]}]");
+//        //System.out.println("==============");
+//       // ocemay.print();
+//      //  RandomReward.getSaveFile();
+//    }
 
     public HashMap<String, Bag> getSaveFile() throws IOException {
         File folder = new File("plugins/RandomReward/players/");

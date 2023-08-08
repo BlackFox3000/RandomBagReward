@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
 
+import fr.lataverne.randomreward.CommandManager;
 import fr.lataverne.randomreward.RandomBuilder;
 import fr.lataverne.randomreward.RandomReward;
 import fr.lataverne.randomreward.Reward;
@@ -38,10 +39,12 @@ public class Bag {
 
     public  Bag(String json) throws JsonProcessingException{
 
+        System.out.println("json: "+json);
         final ObjectMapper objectMapper = new ObjectMapper();
-        Bukkit.getConsoleSender().sendMessage("construction bag d'un joueur");
-        List<Reward> rewards1 = objectMapper.readValue(json, new TypeReference<List<Reward>>(){});
-        rewards = new ArrayList<>(rewards1);
+        //Bukkit.getConsoleSender().sendMessage("construction bag d'un joueur");
+        System.out.println("construction bag d'un joueur");
+        rewards = (ArrayList<Reward>) objectMapper.readValue(json, new TypeReference<List<Reward>>(){});
+       // rewards = new ArrayList<>(rewards1);
     }
 
     public void open(Player player){
@@ -215,9 +218,17 @@ public class Bag {
                 if (rewards.get(index-1) != null) {
                     Reward reward = rewards.get(index-1);
                     rewards.remove(index-1);
-                    String command = reward.isCustomItem()
-                            ? "ir give " + player.getDisplayName() + " " + reward.getName()
-                            : "give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
+
+//                    String command = reward.isCustomItem()
+//                            ? "ir give " + player.getDisplayName() + " " + reward.getName()
+//                            : "give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
+                    String command = switch (reward.getPlugin()) {
+                        case "minecraft" -> "give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
+                        case "itemreward" -> getStringCommandIR(reward, player);
+                        case "itemsadder" -> "iagive " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount() ;
+                        case "ecoitems" -> "ecoitems give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
+                        default -> "say [error] RandomBagReward - plugin inconnu.";
+                    };
 
                     ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
                     Bukkit.dispatchCommand(console, command);
@@ -234,6 +245,18 @@ public class Bag {
         else{
             player.sendMessage(ChatColor.DARK_PURPLE+"Il n'existe pas de récompense à cette emplacement");
         }
+    }
+
+    private String getStringCommandIR(Reward reward,Player player) {
+        String commande = "ir give " + player.getDisplayName() ;
+        String suiteCommande = switch(reward.getName()){
+            case "FlyPotion_1" ->  " FlyPotion " + reward.getCount() + " 1";
+            case "FlyPotion_2" ->  " FlyPotion " + reward.getCount() + " 2";
+            case "FlyPotion_3" ->  " FlyPotion " + reward.getCount() + " 3";
+            case "FlyPotion_4" ->  " FlyPotion " + reward.getCount() + " 4";
+            default -> " "+ reward.getName() +" "+ reward.getCount();
+        };
+        return commande + suiteCommande;
     }
 
     private boolean testSpace(Player player) {

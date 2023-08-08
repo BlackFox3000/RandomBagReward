@@ -198,15 +198,27 @@ public class CommandManager implements CommandExecutor {
 
         String command = switch (reward.getPlugin()) {
             case "minecraft" -> "give " + player.getDisplayName() + " " + reward.nomItem + " " + reward.count;
-            case "itemreward" -> "ir give " + player.getDisplayName() + " " + reward.nomItem;
-            case "itemsadder" -> "iagive " + player.getDisplayName() + " " + reward.nomItem ;
-            case "ecoitems" -> "ecoitems give " + player.getDisplayName() + " " + reward.nomItem;
+            case "itemreward" -> getStringCommandIR(reward, player);
+            case "itemsadder" -> "iagive " + player.getDisplayName() + " " + reward.nomItem + " " + reward.count ;
+            case "ecoitems" -> "ecoitems give " + player.getDisplayName() + " " + reward.nomItem + " " + reward.count;
             default -> "say [error] RandomBagReward - plugin inconnu.";
         };
 
 
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         Bukkit.dispatchCommand(console, command);
+    }
+
+    private String getStringCommandIR(Reward reward,Player player) {
+        String commande = "ir give " + player.getDisplayName() ;
+        String suiteCommande = switch(reward.nomItem){
+            case "FlyPotion_1" ->  " FlyPotion " + reward.count + " 1";
+            case "FlyPotion_2" ->  " FlyPotion " + reward.count + " 2";
+            case "FlyPotion_3" ->  " FlyPotion " + reward.count + " 3";
+            case "FlyPotion_4" ->  " FlyPotion " + reward.getCount() + " 4";
+            default -> " "+ reward.nomItem +" "+ reward.count;
+        };
+        return commande + suiteCommande;
     }
 
     public int invSpace (PlayerInventory inv, Material m) {
