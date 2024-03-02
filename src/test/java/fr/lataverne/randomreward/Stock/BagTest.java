@@ -3,7 +3,6 @@ package fr.lataverne.randomreward.Stock;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.lataverne.randomreward.Car;
 import fr.lataverne.randomreward.Reward;
 import org.junit.jupiter.api.Test;
 
@@ -79,17 +78,6 @@ class BagTest {
             reward.printTest();
         }
 
-    }
-
-    /***
-     * Use for debug
-     * @throws JsonProcessingException
-     */
-    @Test
-    public void TestCar() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = "[{ \"color\" : \"Black\", \"type\" : \"BMW\" },{ \"color\" : \"Black\", \"type\" : \"BMW\" }]";
-        List<Car> listCar = objectMapper.readValue(json, new TypeReference<List<Car>>(){});
     }
 
 }

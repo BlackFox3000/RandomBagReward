@@ -39,12 +39,8 @@ public class Bag {
 
     public  Bag(String json) throws JsonProcessingException{
 
-        System.out.println("json: "+json);
         final ObjectMapper objectMapper = new ObjectMapper();
-        //Bukkit.getConsoleSender().sendMessage("construction bag d'un joueur");
-        System.out.println("construction bag d'un joueur");
         rewards = (ArrayList<Reward>) objectMapper.readValue(json, new TypeReference<List<Reward>>(){});
-       // rewards = new ArrayList<>(rewards1);
     }
 
     public void open(Player player){
@@ -101,7 +97,7 @@ public class Bag {
         rewards.add(reward);
         if(player!=null) {
             TextComponent text = new TextComponent(ChatColor.GREEN + "[RécompenseVote] Merci d'avoir voté ! " + reward.getName() + " ajouté à ton sac. ");
-            text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/rr bag"));
+            text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/rr baglist"));
             player.spigot().sendMessage(text);
             updateBag(uuid);
         }

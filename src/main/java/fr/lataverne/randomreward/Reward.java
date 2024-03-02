@@ -19,6 +19,8 @@ public class Reward {
     @JsonProperty("index")
     int index;
     @Deprecated
+    //Il faut nettoyer les JSON existant
+    // sans quoi une incompatibilité de lire le fichier existe
     @JsonProperty("isCustomItem")
     boolean isCustomItem;
     @JsonProperty("otherArg")
