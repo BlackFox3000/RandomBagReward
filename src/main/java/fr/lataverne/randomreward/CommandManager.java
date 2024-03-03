@@ -39,13 +39,18 @@ public class CommandManager implements CommandExecutor {
 //                return true;
 //            }
 
-            if(args[0].equalsIgnoreCase("baglist") || (args[0].equalsIgnoreCase("bag") && args[1].equalsIgnoreCase("list"))) {
-                if(args.length>1)
-                    if(!Objects.equals(args[1], "list")) // bug
-                        if(Integer.parseInt(args[1])>0) {
-                            printListBag((Player) sender, Integer.parseInt(args[1]));
-                            return true;
-                        }
+
+            if(args[0].equalsIgnoreCase("baglist")
+                    || args[0].equalsIgnoreCase("bag")) {
+                System.out.println("syze arg is : "+args.length);
+                if(args.length>1) {
+                    if (Objects.equals(args[1], "list") && args.length > 2)
+                        args[1] = args[2];
+                    if (Integer.parseInt(args[1]) > 0) {
+                        printListBag((Player) sender, Integer.parseInt(args[1]));
+                        return true;
+                    }
+                }
                 printListBag((Player) sender, 1);
                 return true;
             }

@@ -3,10 +3,8 @@ package fr.lataverne.randomreward.Stock;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
 
-import fr.lataverne.randomreward.CommandManager;
 import fr.lataverne.randomreward.RandomBuilder;
 import fr.lataverne.randomreward.RandomReward;
 import fr.lataverne.randomreward.Reward;
