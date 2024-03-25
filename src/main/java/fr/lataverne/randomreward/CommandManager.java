@@ -42,7 +42,6 @@ public class CommandManager implements CommandExecutor {
 
             if(args[0].equalsIgnoreCase("baglist")
                     || args[0].equalsIgnoreCase("bag")) {
-                System.out.println("syze arg is : "+args.length);
                 if(args.length>1) {
                     if (Objects.equals(args[1], "list") && args.length > 2)
                         args[1] = args[2];
@@ -105,14 +104,30 @@ public class CommandManager implements CommandExecutor {
                 if (args.length<3) {
                     addRewardInBag(args[1]);
                 }else{
-                    Player player = Bukkit.getPlayer(args[1]);
-                    if(player!=null) {
-                        for (int i = 0; i < Integer.parseInt(args[2]); i++)
-                            this.giveCommand(player);
+                    if(args.length == 3 ) {
+                        Player player = Bukkit.getPlayer(args[1]);
+                        if (player != null) {
+                            for (int i = 0; i < Integer.parseInt(args[2]); i++) {
+                                this.giveCommand(player);
+                            }
+                        }
+                    }
+                    if(args.length == 4){
+                        Player player = Bukkit.getPlayer(args[1]);
+                        if (player != null) {
+                            for (int i = 0; i < Integer.parseInt(args[2]); i++) {
+                                this.giveCommand(player);
+                            }
+                            SendRequestTopVote.send(
+                                   player,
+                                    args[3]
+                            );
+                        }
                     }
                 }
                 return true;
             }
+
         }
         if(args[0].equalsIgnoreCase("help"))
         {

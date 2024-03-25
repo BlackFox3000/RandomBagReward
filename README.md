@@ -23,6 +23,8 @@ Avantage de notre plugin :
 -rr list : Affiche les récompenses et leurs pourcentages associés 
 -rr give [pseudo] : Donne une récompense aléatoire dans le sac du joueur désigné
 -rr give [pseudo] [quantité] : Donne une [quantité] de récompense dans l'inventaire du joueur sélectionné
+-rr give [pseudo] [quantité] [site] : envoie d'une notification voir Api
+
 
 -rr help : affiche les commandes joueurs
 -rr adminhelp : affiches les commandes admin
@@ -46,7 +48,6 @@ help est fourni par défaut pour tout les utilisateurs
 - rr.admin.help
 
 
-
 ## Installation
 Chargez le plugin une première fois pour générer les différents fichiers et dossiers :
 - Dossier players où seront stocker les différents bags de joueurs exemple: [players](https://github.com/BlackFox3000/RandomBagReward/tree/master/src/main/java/fr/lataverne/randomreward/players)
@@ -58,6 +59,18 @@ minecraft netherite_scrap 1 2.3
 itemreward ULU 1 1.6
 ```
 Une fois les récompenses terminées, il faut recharger le plugin.
+
+## API
+-rr give [pseudo] [quantité] [site] : envoie d'une notification à l'url via une methode get:
+[urlVoteSite:port] /newvote/ [uuid] / [joueur] / [siteDeVode] / [passPhrase]
+
+Configurer l'[urlVoteSite:port] et la <passPhrase> dans le fichier config.yml
+```yml
+passPhrase: [passPhrase]
+urlVoteSite: [urlVoteSite:port]
+```
+
+
 
 ## Compatibilité
 - [itemReward](https://github.com/la-taverne-mc/ItemReward)
