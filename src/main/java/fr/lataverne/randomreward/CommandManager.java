@@ -113,16 +113,14 @@ public class CommandManager implements CommandExecutor {
                         }
                     }
                     if(args.length == 4){
-                        Player player = Bukkit.getPlayer(args[1]);
-                        if (player != null) {
+
                             for (int i = 0; i < Integer.parseInt(args[2]); i++) {
-                                this.giveCommand(player);
+                                SendRequestTopVote.send(
+                                        sender,
+                                        args[1],
+                                        args[3]
+                                );
                             }
-                            SendRequestTopVote.send(
-                                   player,
-                                    args[3]
-                            );
-                        }
                     }
                 }
                 return true;

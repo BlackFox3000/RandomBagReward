@@ -26,6 +26,7 @@ public class Reward {
     @JsonProperty("otherArg")
     ArrayList<String> otherArg = new ArrayList<>();
 
+
     /**
      *
      */

@@ -18,6 +18,7 @@ import java.util.Objects;
 public class RandomReward extends JavaPlugin {
 
     private static RandomReward instance;
+    public String debug = "disabled";
     private RandomBuilder randomBuilder;
 
     private final boolean DEBUG = true;
@@ -77,8 +78,10 @@ public class RandomReward extends JavaPlugin {
                 FileWriter writer = new FileWriter(file);
 
                 // Écrire les valeurs par défaut dans le fichier YAML
-                writer.write("passPhrase: mapassphrase\n");
+                writer.write("passPhrase: mapassphrase:8000\n");
                 writer.write("urlVoteSite: monurl\n");
+                writer.write("#debug (enabled/disabled)\n");
+                writer.write("debug: enabled\n");
                 writer.close();
 
 
@@ -111,6 +114,8 @@ public class RandomReward extends JavaPlugin {
         // Récupérer la valeur associée à la clé 'passPhrase'
         this.passPhrase = data.get("passPhrase");
         this.urlVoteSite = data.get("urlVoteSite");
+        this.debug = data.get("debug");
+        System.out.println("debug::"+debug);
 
     }
 
