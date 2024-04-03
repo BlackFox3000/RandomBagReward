@@ -1,11 +1,6 @@
 package fr.lataverne.randomreward;
 
-import fr.lataverne.randomreward.Stock.Bag;
-import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 class RandomRewardTest {
 

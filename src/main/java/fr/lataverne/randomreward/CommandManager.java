@@ -1,6 +1,7 @@
 package fr.lataverne.randomreward;
 
-import fr.lataverne.randomreward.Stock.Bag;
+import fr.lataverne.randomreward.api.RequestPost;
+import fr.lataverne.randomreward.stock.Bag;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,6 +16,8 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import static fr.lataverne.randomreward.api.RequestPost.sendPost;
 
 public class CommandManager implements CommandExecutor {
 
@@ -114,16 +117,61 @@ public class CommandManager implements CommandExecutor {
                     }
                     if(args.length == 4){
 
-                            for (int i = 0; i < Integer.parseInt(args[2]); i++) {
-                                SendRequestTopVote.send(
-                                        sender,
-                                        args[1],
-                                        args[3]
-                                );
-                            }
+                        for (int i = 0; i < Integer.parseInt(args[2]); i++) {
+                            SendRequestTopVote.send(
+                                    sender,
+                                    args[1],
+                                    args[3]
+                            );
+                        }
                     }
                 }
                 return true;
+            }
+
+
+        }
+        if (sender instanceof ConsoleCommandSender || sender instanceof Player && sender.hasPermission("rr.api")) {
+            if (args.length < 4) {
+                sender.sendMessage(ChatColor.RED +"Mauvaise utilisation ! /api test [pseudo] [score]");
+                return false;
+            }
+
+            if (args[1].equalsIgnoreCase("test")) {
+                if (args.length==4) {
+                        sender.sendMessage("commande"
+                                +args[0]+", " //api
+                                +args[1]+", " //test
+                                +args[2]+", " //pseudo
+                                +args[3]+", " //score
+                        );
+
+                            RequestPost.sendPost(
+                                    args[2],
+                                    Integer.parseInt(args[3])
+                            );
+                }
+                return true;
+            }
+
+            if(args[1].equalsIgnoreCase("addReward")){
+               sender.sendMessage("aadReward > todo");
+            }
+            if(args[1].equalsIgnoreCase("removeReward")){ // ?? pas utile ??
+                sender.sendMessage("removeReward > todo");
+            }
+            /*
+            /API/UUID/Update/Password
+            Vérifie par itération sur les ID qu'il n'y ai pas de divergence entre les id existant sur le json et sur la bdd,
+             si id existant en bdd mais inexistant sur le json alors suppression de la ligne en bdd
+            Sauvegarde les items qui n'ont pas d'id dans le Json en base de donnée pour sauvegarder le bag
+            Requête POST
+             */
+            if(args[1].equalsIgnoreCase("saveBag")){
+                sender.sendMessage("saveBag > todo");
+            }
+            if(args[1].equalsIgnoreCase("getBag")){
+                sender.sendMessage("getBag > todo");
             }
 
         }

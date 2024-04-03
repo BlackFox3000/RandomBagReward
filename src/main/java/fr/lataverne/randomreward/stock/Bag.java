@@ -1,4 +1,4 @@
-package fr.lataverne.randomreward.Stock;
+package fr.lataverne.randomreward.stock;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -196,7 +196,9 @@ public class Bag {
             String jsonArray = gson.toJson(rewards);
             myWriter.write(jsonArray);
             myWriter.close();
-            Bukkit.getConsoleSender().sendMessage("Successfully wrote to the file.");
+            if(RandomReward.debug == "enable") {
+                Bukkit.getConsoleSender().sendMessage("Successfully wrote to the file.");
+            }
         } catch (IOException e) {
             Bukkit.getConsoleSender().sendMessage("An error occurred.");
             e.printStackTrace();

@@ -1,7 +1,7 @@
 package fr.lataverne.randomreward;
 
-import fr.lataverne.randomreward.Stock.Bag;
-import fr.lataverne.randomreward.Stock.ClickEvent;
+import fr.lataverne.randomreward.stock.Bag;
+import fr.lataverne.randomreward.stock.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.Yaml;
@@ -18,7 +18,7 @@ import java.util.Objects;
 public class RandomReward extends JavaPlugin {
 
     private static RandomReward instance;
-    public String debug = "disabled";
+    public static String debug = "disabled";
     private RandomBuilder randomBuilder;
 
     private final boolean DEBUG = true;

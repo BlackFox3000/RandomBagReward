@@ -25,7 +25,8 @@ public class Reward {
     boolean isCustomItem;
     @JsonProperty("otherArg")
     ArrayList<String> otherArg = new ArrayList<>();
-
+    @JsonProperty("id")
+    int id;
 
     /**
      *

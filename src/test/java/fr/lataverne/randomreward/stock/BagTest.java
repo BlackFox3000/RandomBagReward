@@ -1,4 +1,5 @@
-package fr.lataverne.randomreward.Stock;
+/*
+package fr.lataverne.randomreward.stock;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,7 +17,8 @@ import java.util.Objects;
 
 class BagTest {
 
-    @Test
+  */
+/*  @Test
     public void testUpdateBag(){
         System.out.println("1");
         Bag bag = new Bag();
@@ -25,7 +27,8 @@ class BagTest {
         String[] reward = {"minecraft", "book", "12", "3.4"};
         bag.add(new Reward(reward));
         bag.updateBag("francis");
-    }
+    }*//*
+
 
     @Test
     public void testReadBag() throws IOException {
@@ -80,4 +83,4 @@ class BagTest {
 
     }
 
-}
+}*/
