@@ -1,14 +1,6 @@
-package fr.lataverne.randomreward.api;
+package fr.lataverne.randomreward.api.model;
 
 public class VotreObjetDonnees {
-    public String getPseudo() {
-        return this.pseudo;
-    }
-
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
-    }
-
     public int getScore() {
         return score;
     }
@@ -20,5 +12,12 @@ public class VotreObjetDonnees {
     private String pseudo;
     private int score;
 
+    public String getPseudo() {
+        return this.pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
 }
 

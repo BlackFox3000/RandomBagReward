@@ -12,7 +12,10 @@ import java.io.BufferedReader;
         import java.net.URLEncoder;
 
 public class SendRequestTopVote {
-    public static void send(CommandSender sender, String playerName, String webSite) {
+
+    private Config config = (Config) Config.getInstance();
+
+    public void send(CommandSender sender, String playerName, String webSite) {
         String uuid;
         Player player = Bukkit.getPlayer(playerName);
         if (player == null) {
@@ -21,20 +24,20 @@ public class SendRequestTopVote {
         else {
              uuid = player.getUniqueId().toString();
         }
-        String urlVoteSite = RandomReward.getInstance().urlVoteSite;
-        String secretPassword = RandomReward.getInstance().passPhrase;
+        String urlSiteNotification = config.getConfigValue("urlSiteNotification");
+        String secretPassword = config.getConfigValue("passPhraseNotification");
         webSite = webSite.replace(".","");
         webSite = webSite.replace("-","");
 
         try {
             // Construire l'URL avec les variables
-            String url = urlVoteSite +
+            String url = urlSiteNotification +
                     URLEncoder.encode(uuid, "UTF-8") + "/" +
                     URLEncoder.encode(playerName, "UTF-8") + "/" +
                     URLEncoder.encode(webSite, "UTF-8") + "/" +
                     URLEncoder.encode(secretPassword, "UTF-8");
 
-            if( RandomReward.getInstance().debug.equals("enabled")) {
+            if(config.isDebug()) {
                 sender.sendMessage(ChatColor.DARK_PURPLE + "Send :" + url);
             }
             URL obj = new URL(url);

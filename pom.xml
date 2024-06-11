@@ -6,7 +6,7 @@
 
     <groupId>fr.lataverne</groupId>
     <artifactId>RandomReward</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
     <packaging>jar</packaging>
 
     <name>RandomReward</name>

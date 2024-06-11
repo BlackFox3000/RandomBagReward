@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import fr.lataverne.randomreward.RandomBuilder;
 import fr.lataverne.randomreward.RandomReward;
 import fr.lataverne.randomreward.Reward;
+import fr.lataverne.randomreward.Config;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -196,7 +197,8 @@ public class Bag {
             String jsonArray = gson.toJson(rewards);
             myWriter.write(jsonArray);
             myWriter.close();
-            if(RandomReward.debug == "enable") {
+            Config config = (Config) Config.getInstance();
+            if(config.isDebug()) {
                 Bukkit.getConsoleSender().sendMessage("Successfully wrote to the file.");
             }
         } catch (IOException e) {
@@ -212,32 +214,29 @@ public class Bag {
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vide ton inventaire !");
             else
                 if (rewards.get(index-1) != null) {
-                    Reward reward = rewards.get(index-1);
-                    rewards.remove(index-1);
+            Reward reward = rewards.get(index-1);
+            rewards.remove(index-1);
 
-//                    String command = reward.isCustomItem()
-//                            ? "ir give " + player.getDisplayName() + " " + reward.getName()
-//                            : "give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
-                    String command = switch (reward.getPlugin()) {
-                        case "minecraft" -> "give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
-                        case "itemreward" -> getStringCommandIR(reward, player);
-                        case "itemsadder" -> "iagive " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount() ;
-                        case "ecoitems" -> "ecoitems give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
-                        default -> "say [error] RandomBagReward - plugin inconnu.";
-                    };
+            String command = switch (reward.getPlugin()) {
+                case "minecraft" -> "give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
+                case "itemreward" -> getStringCommandIR(reward, player);
+                case "itemsadder" -> "iagive " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount() ;
+                case "ecoitems" -> "ecoitems give " + player.getDisplayName() + " " + reward.getName() + " " + reward.getCount();
+                default -> "say [error] RandomBagReward - plugin inconnu.";
+            };
 
-                    ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-                    Bukkit.dispatchCommand(console, command);
+            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+            Bukkit.dispatchCommand(console, command);
 
-                    updateBag(player.getUniqueId().toString());
+            updateBag(player.getUniqueId().toString());
 
-                    if(print) {
-                        //ré-affichage du sac actualisé
-                        String command2 = "rr baglist ";
-                        Bukkit.dispatchCommand(player, command2);
-                    }
-                }
+            if(print) {
+                //ré-affichage du sac actualisé
+                String command2 = "rr baglist ";
+                Bukkit.dispatchCommand(player, command2);
+            }
         }
+    }
         else{
             player.sendMessage(ChatColor.DARK_PURPLE+"Il n'existe pas de récompense à cette emplacement");
         }

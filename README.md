@@ -66,8 +66,17 @@ Une fois les récompenses terminées, il faut recharger le plugin.
 
 Configurer l'[urlVoteSite:port] et la <passPhrase> dans le fichier config.yml
 ```yml
-passPhrase: [passPhrase]
-urlVoteSite: [urlVoteSite:port]
+passPhraseNotification: [passPhrase]
+urlSiteNotification: [urlSiteGetNotification:port]
+#Selection du type de stockage (json/api)
+## par defaut par json
+storageMode: json
+#Connexion BDD
+passPhraseStorage: mapassphrase:8000
+urlApiStorage: myUrlApiStorage
+#Debug (enable/disable)
+## par defaut par enable
+debug: enable
 ```
 
 

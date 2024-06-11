@@ -1,7 +1,7 @@
 package fr.lataverne.randomreward.api;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.lataverne.randomreward.Reward;
-import fr.lataverne.randomreward.SendRequestTopVote;
+import fr.lataverne.randomreward.api.model.VotreObjetDonnees;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,11 +10,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class RequestPost{
+    static boolean DEBUG = true;
 
     public static void envoyerRequetePOST(String url, Object data) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String jsonBody = mapper.writeValueAsString(data);
-        System.out.println(jsonBody);
+        if(DEBUG) {
+            System.out.println(jsonBody);
+        }
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -40,13 +43,14 @@ public class RequestPost{
         }
         in.close();
 
-        // Affichage de la réponse
-        System.out.println(response.toString());
+        if(DEBUG) {
+            // Affichage de la réponse
+            System.out.println(response.toString());
+        }
     }
 
     public static void sendPost(String pseudo, int score) {
-        String url = "VOTRE-URL-ICI"; // Modifier avec votre URL cible
-
+        String url = ""; // Modifier avec votre URL cible
         // Création de l'objet avec les données à envoyer
         VotreObjetDonnees data = new VotreObjetDonnees();
         data.setPseudo(pseudo);
@@ -59,9 +63,5 @@ public class RequestPost{
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        sendPost("bob3",25);
     }
 }

@@ -1,5 +1,6 @@
 package fr.lataverne.randomreward;
 
+import fr.lataverne.randomreward.api.DiscordApiController;
 import fr.lataverne.randomreward.api.RequestPost;
 import fr.lataverne.randomreward.stock.Bag;
 import org.bukkit.Bukkit;
@@ -17,16 +18,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import static fr.lataverne.randomreward.api.RequestPost.sendPost;
 
 public class CommandManager implements CommandExecutor {
 
     HashMap<String, Bag> bags;
     public boolean DEBUG = false;
 
+    public SendRequestTopVote sendRequestTopVote = new SendRequestTopVote();
+
     public CommandManager(HashMap<String,Bag> initialBags){
         bags = initialBags;
     }
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -62,7 +65,6 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
         }
-
         if (sender instanceof ConsoleCommandSender || sender instanceof Player && sender.hasPermission("rr.bag.get")){
             if (args.length < 1) {
                 sender.sendMessage(ChatColor.RED +"Mauvaise utilisation !");
@@ -79,19 +81,10 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
             if(args[0].equalsIgnoreCase("getAll")) {
-                if(bags.containsKey(((Player)sender).getUniqueId().toString())) {
-                    assert sender instanceof Player;
-                    while (!bags.get(((Player) sender).getUniqueId().toString()).rewards.isEmpty() && invSpace(((Player) sender).getInventory()) != 0) {
-                        giveRewardToPlayer((Player) sender, String.valueOf(1), false);
-                }
-                }else
-                    sender.sendMessage(ChatColor.DARK_PURPLE+"Vous ne possédez aucun sac");
-
-                return true;
+                return getAllBag((Player) sender);
             }
 
         }
-
         if (sender instanceof ConsoleCommandSender || sender instanceof Player && sender.hasPermission("rr.give")) {
             if (args.length < 1) {
                 sender.sendMessage(ChatColor.RED +"Mauvaise utilisation !");
@@ -118,7 +111,7 @@ public class CommandManager implements CommandExecutor {
                     if(args.length == 4){
 
                         for (int i = 0; i < Integer.parseInt(args[2]); i++) {
-                            SendRequestTopVote.send(
+                            sendRequestTopVote.send(
                                     sender,
                                     args[1],
                                     args[3]
@@ -133,7 +126,7 @@ public class CommandManager implements CommandExecutor {
         }
         if (sender instanceof ConsoleCommandSender || sender instanceof Player && sender.hasPermission("rr.api")) {
             if (args.length < 4) {
-                sender.sendMessage(ChatColor.RED +"Mauvaise utilisation ! /api test [pseudo] [score]");
+                sender.sendMessage(ChatColor.RED +"Mauvaise utilisation ! /rr api test [pseudo] [score]");
                 return false;
             }
 
@@ -152,6 +145,14 @@ public class CommandManager implements CommandExecutor {
                             );
                 }
                 return true;
+            }
+            if(args[1].equalsIgnoreCase("sendDiscord")){
+                sender.sendMessage("sendDiscord > todo");
+                try {
+                    return DiscordApiController.sendMessages(sender, args);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             if(args[1].equalsIgnoreCase("addReward")){
@@ -211,11 +212,42 @@ public class CommandManager implements CommandExecutor {
         return false;
     }
 
+    /**
+     * Fill player's inventory with bag's rewards
+     * @param player
+     * @return
+     */
+    private boolean getAllBag(Player player) {
+        String playerUuid =  player.getUniqueId().toString();
+        if(bags.containsKey(playerUuid)) {
+
+            int slotsFree = invSpace(player.getInventory());
+            int rewardsAvailables = bags.get(playerUuid).rewards.size();
+
+            //tant que l'inventaire du joueur n'est pas complet
+            while (rewardsAvailables > 0 && slotsFree > 0) {
+                //pour chaque slot de libre
+                for(int slotIndex=0; slotIndex<slotsFree; slotIndex++) {
+                    //pour chaque récompense disponible
+                    if (slotIndex <= rewardsAvailables) {
+                        giveRewardToPlayer(player, String.valueOf(1), false);
+                    }
+                }
+                slotsFree = invSpace(player.getInventory());
+                rewardsAvailables = bags.get(playerUuid).rewards.size();
+                //s'il reste des slots libres (des récompenses se sont stackées) on recommence
+            }
+        }else
+            player.sendMessage(ChatColor.DARK_PURPLE+"Vous ne possédez aucun sac");
+        return true;
+    }
+
     private void giveRewardToPlayer(Player player, String arg1, boolean print) {
         int index = Integer.parseInt(arg1);
         if (player!=null)
             if(bags.containsKey(player.getUniqueId().toString())) {
-                bags.get(player.getUniqueId().toString()).get(player,index, print);
+                Bag playerBag=  bags.get(player.getUniqueId().toString());
+                playerBag.get(player,index, print);
             }else
                 player.sendMessage(ChatColor.DARK_PURPLE+"Vous ne possédez aucun sac");
     }
@@ -305,12 +337,10 @@ public class CommandManager implements CommandExecutor {
 
     public int invSpace (PlayerInventory inv) {
         int count = 0;
-        for (int slot = 0; slot < 36; slot ++) {
-            ItemStack is = inv.getItem(slot);
-            if (is == null) {
+        for (ItemStack slot :inv) {
+            if(slot != null){
                 count++;
             }
-
         }
         return count;
     }
