@@ -1,8 +1,11 @@
 package fr.lataverne.randomreward.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.lataverne.randomreward.RandomReward;
 import fr.lataverne.randomreward.api.model.VotreObjetDonnees;
+import org.bukkit.configuration.file.FileConfiguration;
 
+import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -50,7 +53,9 @@ public class RequestPost{
     }
 
     public static void sendPost(String pseudo, int score) {
-        String url = ""; // Modifier avec votre URL cible
+        FileConfiguration fileConfiguration = RandomReward.getInstance().getConfig();
+        String url = fileConfiguration.getString("passPhraseVote");
+        //String url = "http://tintorri.com/tamagochi/api.php"; // Modifier avec votre URL cible
         // Création de l'objet avec les données à envoyer
         VotreObjetDonnees data = new VotreObjetDonnees();
         data.setPseudo(pseudo);

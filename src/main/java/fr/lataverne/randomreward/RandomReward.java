@@ -19,14 +19,11 @@ public class RandomReward extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        System.out.println("pass 0");
         /* Fichier : rewards.txt */
         Config.getInstance();
-        System.out.println("pass 1");
         File fileReward = createIfNotexistRewardFile();
-        System.out.println("pass 2");
         instance = this;
-        System.out.println("pass 3");
+
         /* Chargement des Bags */
         HashMap<String, Bag> initialBags = null;
         try {
@@ -57,6 +54,7 @@ public class RandomReward extends JavaPlugin {
     }
 
     private File createIfNotexistRewardFile() {
+        //charge un fichier si il existe ou null
         File file = new File(getDataFolder(), "rewards.txt");
         if (!file.exists()) {// saves it to your plugin's data folder if it doesn't exist already
             file.getParentFile().mkdirs();
