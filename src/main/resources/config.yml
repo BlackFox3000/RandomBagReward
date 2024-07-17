@@ -1,0 +1,8 @@
+#Notification vote
+passPhraseNotification: mapassphrase:8000
+urlNotification: monurl
+#Connexion BDD
+passPhraseStorage: mapassphrase:8000
+urlStorage: monapi
+#Debug (enable/disable)
+debug: enable

@@ -82,3 +82,8 @@ urlVoteSite: [urlVoteSite:port]
 ## À venir
 - Bag GUI (visible en faisant /rr bag actuelement disponible uniquement au OP, sert actuelement de grosse poubelle) 
  
+## Prè-débug 
+Les bags joueurs dépassent les 1000 items régulièrement : 
+restreindre le getbag à 1000 item max la requete sql (limitation via api bdd)
+
+
