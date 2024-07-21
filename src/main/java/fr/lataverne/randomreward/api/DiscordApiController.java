@@ -39,9 +39,9 @@ public class DiscordApiController {
     public static void main(String[] args) throws Exception {
         DiscordApiController.sendDiscordPostRequest(
                 urlChannelDiscord,
-                "d423ad26-b0d1-4d8f-896c-8505410d7ae3",
-                "jAvEE_fr",
-                "minestatus.net"
+                "uuid",
+                "pseudo",
+                "addr"
         );
     }
 
