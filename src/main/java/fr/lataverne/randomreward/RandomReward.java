@@ -1,12 +1,10 @@
 package fr.lataverne.randomreward;
 
 
-import fr.lataverne.randomreward.api.ApiRequestManager;
 import fr.lataverne.randomreward.commands.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Level;
 

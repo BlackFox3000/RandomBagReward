@@ -24,6 +24,7 @@ Avantage de notre plugin :
 -rr give [pseudo] : Donne une récompense aléatoire dans le sac du joueur désigné
 -rr give [pseudo] [quantité] : Donne une [quantité] de récompense dans l'inventaire du joueur sélectionné
 -rr give [pseudo] [quantité] [site] : envoie d'une notification voir Api
+-rr sendNotiVote [uuid] [pseudo] [site] [score]
 
 
 -rr help : affiche les commandes joueurs
