@@ -14,15 +14,15 @@ import java.io.BufferedReader;
 public class SendRequestTopVote {
     public static void send(CommandSender sender, String playerName, String webSite) {
         String uuid;
-        Player player = Bukkit.getPlayer(playerName);
+        Player player = null;//Bukkit.getPlayer(playerName);
         if (player == null) {
-             uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId().toString();
+             uuid ="3e7df75c-abdb-4187-865c-488c8c41d0b5";//= Bukkit.getOfflinePlayer(playerName).getUniqueId().toString();
         }
         else {
              uuid = player.getUniqueId().toString();
         }
-        String urlVoteSite = RandomReward.getInstance().urlVoteSite;
-        String secretPassword = RandomReward.getInstance().passPhrase;
+        String urlVoteSite = "http://panel.lataverne.me:5000/newvote/";// RandomReward.getInstance().urlVoteSite;
+        String secretPassword = "Supersecretpassword";// RandomReward.getInstance().passPhrase;
         webSite = webSite.replace(".","");
         webSite = webSite.replace("-","");
 
@@ -34,9 +34,9 @@ public class SendRequestTopVote {
                     URLEncoder.encode(webSite, "UTF-8") + "/" +
                     URLEncoder.encode(secretPassword, "UTF-8");
 
-            if( RandomReward.getInstance().debug.equals("enabled")) {
-                sender.sendMessage(ChatColor.DARK_PURPLE + "Send :" + url);
-            }
+//            if( RandomReward.getInstance().debug.equals("enabled")) {
+//                sender.sendMessage(ChatColor.DARK_PURPLE + "Send :" + url);
+//            }
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -61,7 +61,5 @@ public class SendRequestTopVote {
             e.printStackTrace();
         }
     }
-
-
 
 }

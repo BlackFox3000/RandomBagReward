@@ -241,7 +241,7 @@ public class CommandManager implements CommandExecutor {
 
     public int invSpace (PlayerInventory inv, Material m) {
         int count = 0;
-        for (int slot = 0; slot < 36; slot ++) {
+        for (int slot = 0; slot <= 36; slot ++) {
             ItemStack is = inv.getItem(slot);
             if (is == null) {
                 count += m.getMaxStackSize();
