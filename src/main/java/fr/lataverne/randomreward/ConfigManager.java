@@ -29,12 +29,15 @@ public class ConfigManager {
         boolean fielsExist = config.contains("passPhraseNotification",true) &&
                 config.contains("urlNotification",true) &&
                 config.contains("passPhraseStorage",true) &&
-                config.contains("urlStorage",true);
+                config.contains("urlStorage",true ) &&
+                config.contains("urlGetVotes",true) &&
+                config.contains("urlGetVote",true);
 
-        boolean fielsNotEmpty = getPassPhraseNotification() != null &&
+        boolean fielsNotEmpty = getTokenNotification() != null &&
                 getUrlNotification() != null &&
                 getPassPhraseStorage() != null &&
-                getUrlStorage() != null ;
+                getUrlStorage() != null  &&
+                getUrlGetVote() != null ;
 
         return fielsExist && fielsNotEmpty;
     }
@@ -42,10 +45,10 @@ public class ConfigManager {
     public void reloadConfig() throws IOException {
         // Recharge la configuration
         plugin.reloadConfig();
-        System.out.println("test: " + getPassPhraseNotification());
+        System.out.println("test: " + getTokenNotification());
     }
 
-    public String getPassPhraseNotification() {
+    public String getTokenNotification() {
         return config.getString("passPhraseNotification");
     }
 
@@ -63,6 +66,14 @@ public class ConfigManager {
 
     public boolean getDebug() {
         return "enable".equals(config.getString("debug"));
+    }
+
+    public String getUrlGetVote()  {
+        return config.getString("UrlGetVote");
+    }
+
+    public String getUrlGetVotes()  {
+        return config.getString("UrlGetVotes");
     }
 
 }

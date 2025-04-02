@@ -103,6 +103,7 @@ public class CommandManager implements CommandExecutor {
         sender.sendMessage(
                 Component.text("bag").color(NamedTextColor.AQUA)
         );
+
         return true;
     }
 

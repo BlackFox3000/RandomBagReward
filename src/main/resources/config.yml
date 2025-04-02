@@ -1,8 +1,13 @@
-#Notification vote
+# Notification vote
 passPhraseNotification: mapassphrase:8000
 urlNotification: monurl
-#Connexion BDD
+# Url get Vote
+# Attention ! urlGetVote sera utilisée également pour /url?pseudo='xxx'&nbMonth='[mmYYYY]
+urlGetVote: monUrlGetVote?pseudo=:8000
+# Attention ! monUrlGetVotes sera utilisée également pour /url?nbMonth='[mmYYYY]
+urlGetVotes: monUrlGetVotes:8000
+# Connexion BDD
 passPhraseStorage: mapassphrase:8000
 urlStorage: monapi
-#Debug (enable/disable)
+# Debug (enable/disable)
 debug: enable

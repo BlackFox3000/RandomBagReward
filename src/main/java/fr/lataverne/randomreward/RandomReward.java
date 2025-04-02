@@ -1,6 +1,7 @@
 package fr.lataverne.randomreward;
 
 
+import com.fasterxml.jackson.databind.DatabindContext;
 import fr.lataverne.randomreward.commands.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,13 +12,19 @@ import java.util.logging.Level;
 public class RandomReward extends JavaPlugin {
     private static ConfigManager configManager;
     private CommandManager commandManager;
+    private static RandomReward instance;
+
+    public static RandomReward getInstance() {
+        return instance;
+    }
 
     public ConfigManager getConfigManager() {
-        return this.configManager;
+        return configManager;
     }
 
     @Override
     public void onEnable() {
+        instance = this;
         setupConfig();
         runCommands();
 
