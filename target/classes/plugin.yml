@@ -13,7 +13,8 @@ commands:
   randomreward:
     aliases:
       - rr
-
 permissions:
+  rr.reload:
+    default: op
   rr.give:
     default: op

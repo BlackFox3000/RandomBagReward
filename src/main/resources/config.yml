@@ -1,13 +1,17 @@
 # Notification vote
-passPhraseNotification: mapassphrase:8000
-urlNotification: monurl
-# Url get Vote
-# Attention ! urlGetVote sera utilisée également pour /url?pseudo='xxx'&nbMonth='[mmYYYY]
-urlGetVote: monUrlGetVote?pseudo=:8000
-# Attention ! monUrlGetVotes sera utilisée également pour /url?nbMonth='[mmYYYY]
-urlGetVotes: monUrlGetVotes:8000
+tokenNotification: TOKEN
+urlNotification: monurl:8000
+## Url get Vote
+## Attention ! urlGetVote sera utilisée également pour /url?uuid='xxx'&nbMonth='[mmYYYY]
+## Attention ! monUrlGetVote sera utilisée également pour /url?nbMonth='[mmYYYY]
+urlGetVote: monUrlGetVote?uuid=:8000
 # Connexion BDD
-passPhraseStorage: mapassphrase:8000
-urlStorage: monapi
+tokenReward: TOKEN
+urlReward: monapi:8000
+#Path use for transfert Json files to DB
+pathFilesJson: /plugins/RandomReward/Players/
+#Path use to give random reward
+#default : "plugins\\randomreward\\rewards.yml"
+pathFileReward: "plugins\\randomreward\\rewards.yml"
 # Debug (enable/disable)
 debug: enable

@@ -2,12 +2,15 @@ package fr.lataverne.randomreward.api;
 
 import fr.lataverne.randomreward.ConfigManager;
 import fr.lataverne.randomreward.RandomReward;
-import fr.lataverne.randomreward.commands.CommandManager;
+import fr.lataverne.randomreward.models.RewardDB;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static fr.lataverne.randomreward.api.RequestPost.config;
+import static fr.lataverne.randomreward.controllers.PlayerController.getPlayertoPseudo;
 
 public class ApiRequestManager {
 
@@ -23,34 +26,59 @@ public class ApiRequestManager {
         //System.out.println(String.format("GET %s.", url));
     }
 
-    public String getBag(String uuid) {
-        return "{}"; //this.commandManager.getUrlStorage();
+    public static List<RewardDB> getBag(String uuid) throws Exception {
+        List<Map<String, Object>> rewardsMap = RewardService.getRewards(uuid, config);
+        List<RewardDB> rewardDBList = new ArrayList<>();
+
+        for (Map<String, Object> rewardMap : rewardsMap) {
+            //System.out.println(" reward map "+rewardMap.toString());
+            RewardDB rewardDB = new RewardDB();
+            int id = Integer.parseInt((String) rewardMap.get("id"));
+            int count = Integer.parseInt((String) rewardMap.get("count"));
+
+            rewardDB.setId(id);
+            rewardDB.setUuid(uuid);
+            rewardDB.setPlugin((String) rewardMap.get("plugin"));
+            rewardDB.setItem((String) rewardMap.get("item"));
+            rewardDB.setCount(count);
+
+            rewardDBList.add(rewardDB);
+        }
+
+        return rewardDBList;
     }
+
+    public static RewardDB getReward(int indexItem) throws Exception {
+        return RewardService.getReward(indexItem, config);
+    }
+
 
     // ========== Notification and top vote count =============
+
+    public static void sendNotificationVote(CommandSender sender, String pseudo) throws Exception {
+        Player player = getPlayertoPseudo(sender, pseudo);
+        if(player!=null) {
+            NotificationService.sendNotificationVotePost(player.getUniqueId().toString(), config);
+        }
+    }
+
     /**
-     *
-     * @param pseudo
+     * @param uuid Le joueur cible à qui on souhaite connaitre ses votes.
      * @throws Exception
      */
-    public void getCurrentMonthVoteForOnePlayer(String pseudo) throws Exception {
-        // "http://localhost/ApiRandomReward/getVote.php?pseudo="
-        RequestPost.sendGet(config.getUrlGetVote() + URLEncoder.encode(pseudo, StandardCharsets.UTF_8));
+    public static int getCurrentMonthVoteForOnePlayer(String uuid) throws Exception {
+        return NotificationService.getVotesForUuid(uuid, config);
     }
 
-    public void getCurrentMonthVoteForAll() throws Exception {
-        // "http://localhost/ApiRandomReward/getVotes.php"
-        RequestPost.sendGet(config.getUrlGetVotes());
+    public static Map<String, Integer> getCurrentMonthVoteForAll() throws Exception {
+        return NotificationService.getAllVotes(config);
     }
 
-    public void getSelectedMonthVoteForOnePlayer(String pseudo, String nbMonth) throws Exception {
-        // "http://localhost/ApiRandomReward/getVote.php?pseudo="
-        RequestPost.sendGet(config.getUrlGetVote() + URLEncoder.encode(pseudo, StandardCharsets.UTF_8)
-        +"/?nbMonth="+URLEncoder.encode(nbMonth, StandardCharsets.UTF_8));
+    public static int getSelectedMonthVoteForOnePlayer(String uuid, String date) throws Exception {
+        return NotificationService.getVotesForUuid(uuid,date,config);
     }
 
-    public void getSelectedMonthVoteForAll(String nbMonth) throws Exception {
-        // "http://localhost/ApiRandomReward/getVotes.php?nbMonth="
-        RequestPost.sendGet(config.getUrlGetVotes() + URLEncoder.encode(nbMonth, StandardCharsets.UTF_8));
+    public static Map<String, Integer> getSelectedMonthVoteForAll(String date) throws Exception {
+        return NotificationService.getAllVotes(date, config);
     }
 }
