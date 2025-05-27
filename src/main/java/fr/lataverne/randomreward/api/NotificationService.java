@@ -56,41 +56,79 @@ public class NotificationService {
     }
 
     public static int getVotesForUuid(String uuid,  ConfigManager config) throws Exception {
+        System.out.println("uuid : "+uuid);
         return getVotesForUuid( uuid, null, config);
     }
 
-    public static int getVotesForUuid(String uuid, String date, ConfigManager config) throws Exception {
+    public static int getVotesForUuid(String uuid, String date, ConfigManager config) {
         String url = config.getUrlNotification() + "?uuid=" + uuid;
         if (date != null) {
             url += "&nbMonth=" + date;
         }
 
-        HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Authorization", "Bearer " + config.getTokenNotification());
+        //log("Requête GET vers : " + url); // Log de l'URL complète
 
-        int responseCode = con.getResponseCode();
-        if (config.getDebug()) log("GET getVotesForUuid -> Code: " + responseCode);
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestMethod("GET");
 
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = in.readLine()) != null) response.append(line);
+            String token = config.getTokenNotification();
+            con.setRequestProperty("Authorization", "Bearer " + token);
 
-                if (config.getDebug()) log("Réponse: " + response);
-                JSONObject json = new JSONObject();
+            //log("Header Authorization: Bearer " + token);
 
-                if (json.has("nbVotes")) {
-                    return json.getInt("nbVotes");
-                } else {
-                    return 0; // Aucun vote
+            int responseCode = con.getResponseCode();
+            if (config.getDebug()) log("GET getVotesForUuid -> Code: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) response.append(line);
+
+                    String respStr = response.toString();
+                    if (config.getDebug()) log("Réponse: " + respStr);
+
+                    // Si la réponse contient une erreur explicite → retour -1
+                    if (respStr.contains("\"error\"")) {
+                        if (config.getDebug()) log("Aucun vote trouvé pour UUID: " + uuid);
+                        return -1;
+                    }
+
+                    JSONArray jsonArray;
+
+                    if (respStr.charAt(0) != '[') {
+                        jsonArray = new JSONArray("[" + respStr + "]");
+                    } else {
+                        jsonArray = new JSONArray(respStr);
+                    }
+
+                    int totalVotes = 0;
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+
+                        if (uuid.equals(obj.optString("uuid"))) {
+                            totalVotes += Integer.parseInt(obj.optString("nbVotes", "0"));
+                        }
+                    }
+
+                    return totalVotes;
                 }
+            } else {
+                if (config.getDebug()) log("Réponse HTTP non OK: " + responseCode);
+                return -1;
             }
-        } else {
-            throw new RuntimeException("Erreur HTTP: " + responseCode);
+
+        } catch (Exception e) {
+            log("Erreur lors de la récupération des votes : " + e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
     }
+
+
+
+
 
     public static Map<String, Integer> getAllVotes(ConfigManager config) throws Exception{
         return getAllVotes(getCurrentMonth(), config);

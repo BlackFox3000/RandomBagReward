@@ -10,8 +10,8 @@ import static org.bukkit.Bukkit.getConsoleSender;
 public class RewardListController {
 
     private final List<Reward> rewards = new ArrayList<>();
-    private final Map<Integer, Reward> rewardMap = new HashMap<>();
-    private int indexMax = 0;
+    private static final Map<Integer, Reward> rewardMap = new HashMap<>();
+    private static int indexMax = 0;
 
     public RewardListController(String pathRewardFile) {
         try {
@@ -61,12 +61,12 @@ public class RewardListController {
         }
     }
 
-    public Reward getRandomReward() {
+    public static Reward getRandomReward() {
         int randomIndex = (int) (Math.random() * indexMax);
         return getRewardByIndex(randomIndex);
     }
 
-    private Reward getRewardByIndex(int index) {
+    private static Reward getRewardByIndex(int index) {
         return rewardMap.entrySet().stream()
                 .filter(entry -> index <= entry.getKey())
                 .min(Comparator.comparingInt(Map.Entry::getKey))

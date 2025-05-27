@@ -201,7 +201,8 @@ public class RewardService {
     }
 
     public static RewardDB getReward(int idReward, ConfigManager config) throws Exception {
-        //System.out.println("config.getUrlReward() : " + config.getUrlReward());
+        System.out.println("config.getUrlReward() : " + config.getUrlReward());
+        System.out.println("idReward: " + idReward);
         URL url = new URL(config.getUrlReward());
 
         // Connexion HTTP

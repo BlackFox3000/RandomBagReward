@@ -20,6 +20,14 @@ import static net.kyori.adventure.text.Component.text;
 public class BagController {
 
 
+    /**
+     * Affiche la page numéro indexPage du bag si existe de l'uuidOwner
+     * @param sender console ou player
+     * @param indexPage index de la page
+     * @param uuidOwner uuid du joueur possédant le bag ciblé
+     * @return affiche une page du bag
+     * @throws Exception récupération du sac impossible.
+     */
     public static boolean getBag(CommandSender sender, int indexPage, String uuidOwner) throws Exception {
         if(indexPage!=0) {
             indexPage--;
@@ -71,7 +79,7 @@ public class BagController {
                         .append(text(reward.getString(), NamedTextColor.WHITE))
                         .append(text(" -- ", NamedTextColor.AQUA))
                         .append(text(spaceQuantity+reward.getCount(), NamedTextColor.WHITE))
-                        .clickEvent(ClickEvent.runCommand("/rr get " + reward.getId()))
+                        .clickEvent(ClickEvent.runCommand("/rr get " + indexItem))
                         .hoverEvent(HoverEvent.showText(text("Clique pour obtenir !", NamedTextColor.AQUA)))
                         .build();
             }else{
@@ -156,7 +164,7 @@ public class BagController {
         footer.append(Component.text(" ===========", NamedTextColor.AQUA));
 
         // Page suivante
-        if (index * 7 < max) {
+        if (index < max) {
             String space = index < 10 ? "  " : index < 100 ? " " : "";
             footer //11
                     .append(Component.text("Page " + (index + 1) + space + " >>", NamedTextColor.WHITE)

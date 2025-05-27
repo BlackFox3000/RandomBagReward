@@ -2,6 +2,8 @@ package fr.lataverne.randomreward.models;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class RewardDB {
     public int id;
@@ -76,4 +78,53 @@ public class RewardDB {
             return null;
         }
     }
+
+    public ItemStack getItemStack() {
+        Material material = getMaterial();
+
+        if (material != null) {
+            // Cas des items Minecraft vanilla
+            ItemStack itemStack = new ItemStack(material);
+            itemStack.setAmount(Math.min(count, itemStack.getMaxStackSize()));
+            ItemMeta meta = itemStack.getItemMeta();
+            meta.setDisplayName("§f" + this.getName());
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        }
+
+        // Cas des plugins tiers : on génère un ItemStack de substitution selon le plugin
+        return getPlaceholderItem();
+    }
+
+    private ItemStack getPlaceholderItem() {
+        ItemStack itemStack;
+
+        switch (plugin.toLowerCase()) {
+            case "itemreward":
+                itemStack = new ItemStack(Material.GOLD_INGOT);
+                break;
+
+            case "itemsadder":
+                itemStack = new ItemStack(Material.LIME_DYE);
+                break;
+
+            case "ecoitems":
+                itemStack = new ItemStack(Material.NETHER_STAR);
+                break;
+
+            default:
+                itemStack = new ItemStack(Material.BARRIER); // plugin inconnu
+                break;
+        }
+
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.setDisplayName("§c" + this.plugin + ": " + this.item);
+        itemStack.setItemMeta(meta);
+
+        itemStack.setAmount(1); // toujours 1 visuellement, ou adapter selon contexte
+
+        return itemStack;
+    }
+
+
 }

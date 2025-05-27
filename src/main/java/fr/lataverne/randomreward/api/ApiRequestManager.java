@@ -26,6 +26,12 @@ public class ApiRequestManager {
         //System.out.println(String.format("GET %s.", url));
     }
 
+    /**
+     * Obtenir le bag associé à l'uuid
+     * @param uuid du joueur cible
+     * @return le bag du joueur
+     * @throws Exception récupération du sac impossible.
+     */
     public static List<RewardDB> getBag(String uuid) throws Exception {
         List<Map<String, Object>> rewardsMap = RewardService.getRewards(uuid, config);
         List<RewardDB> rewardDBList = new ArrayList<>();
@@ -80,5 +86,9 @@ public class ApiRequestManager {
 
     public static Map<String, Integer> getSelectedMonthVoteForAll(String date) throws Exception {
         return NotificationService.getAllVotes(date, config);
+    }
+
+    public static void deleteReward(int indexItem) throws Exception {
+        RewardService.deleteReward(indexItem, config);
     }
 }

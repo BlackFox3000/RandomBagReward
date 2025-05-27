@@ -3,6 +3,7 @@ package fr.lataverne.randomreward;
 import fr.lataverne.randomreward.api.ApiRequestManager;
 import fr.lataverne.randomreward.commands.CommandManager;
 import fr.lataverne.randomreward.controllers.RewardListController;
+import fr.lataverne.randomreward.gui.BagInterfaceListener;
 import fr.lataverne.randomreward.models.Reward;
 import fr.lataverne.randomreward.models.RewardDB;
 import org.bukkit.Bukkit;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -49,6 +51,9 @@ public class RandomReward extends JavaPlugin {
 
         // Enregistre les commandes
         runCommands();
+
+        // Lister GUI
+        Bukkit.getPluginManager().registerEvents(new BagInterfaceListener(), this);
     }
 
     private void apiBuild() {
@@ -132,6 +137,10 @@ public class RandomReward extends JavaPlugin {
     }
 
     public List<Reward> getRewardList() {
-        return rewardListController.getRewardList();
+        return rewardListController != null ? rewardListController.getRewardList() : new ArrayList<>();
+    }
+
+    public ApiRequestManager getApiRequestManager() {
+        return this.apiRequestManager;
     }
 }

@@ -9,7 +9,7 @@ class RandomRewardTest {
 
     @Test
     public void myTest(){
-        for(int i=0; i<100; i++)
-            log("i: "+i+" max: "+(int) Math.ceil((double)i/7));
+//        for(int i=0; i<100; i++)
+//            log("i: "+i+" max: "+(int) Math.ceil((double)i/7));
     }
 }
